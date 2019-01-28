@@ -13,7 +13,7 @@ import java.lang.reflect.Type;
  * Created by Conways on 2019/1/27
  * Describe:
  */
-public abstract class HttpCallBack<T,K> implements ICallBack {
+public abstract class HttpCallBack<T, K> implements ICallBack {
 
     private Handler handler;
 
@@ -34,7 +34,9 @@ public abstract class HttpCallBack<T,K> implements ICallBack {
         Type[] types = ((ParameterizedType) type).getActualTypeArguments();
         Class<?> c = (Class<?>) types[0];
         final T t = (T) new Gson().fromJson(result, c);
-
+        if (null == weakObj()) {
+            return;
+        }
         handler.post(new Runnable() {
             @Override
             public void run() {
@@ -46,7 +48,9 @@ public abstract class HttpCallBack<T,K> implements ICallBack {
 
     @Override
     public void onFailed(int code, final String msg) {
-
+        if (null == weakObj()) {
+            return;
+        }
         handler.post(new Runnable() {
             @Override
             public void run() {
