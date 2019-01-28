@@ -22,24 +22,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         tv = findViewById(R.id.hello);
-        HttpClient.getInstance().init(new OkRequest());
-        HttpClient.getInstance().get("http://www.weather.com.cn/data/sk/101110101.html", null,
-                new HttpCallBack<WeatherEntity, MainActivity>(this) {
-                    @Override
-                    protected void onSuccessed(WeatherEntity result) {
-                        weakObj().tv.setText(result.getWeatherinfo().toString());
-                    }
+        HttpClient.getInstance().get("http://www.weather.com.cn/data/sk/101110101.html", null, new WetherCallBack(this));
+    }
 
-                    @Override
-                    protected void onFailed(String msg) {
+    public static class WetherCallBack extends HttpCallBack<WeatherEntity, MainActivity> {
+        public WetherCallBack(MainActivity object) {
+            super(object);
+        }
 
-                    }
+        @Override
+        protected void onSuccessed(WeatherEntity result) {
+            weakObj().tv.setText(result.getWeatherinfo().toString());
+        }
 
-                    @Override
-                    protected void onCompleted() {
-                        super.onCompleted();
-                    }
-                });
+        @Override
+        protected void onFailed(String msg) {
+
+        }
+
+        @Override
+        protected void onCompleted() {
+            super.onCompleted();
+        }
     }
 
 }
